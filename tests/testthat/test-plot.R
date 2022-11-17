@@ -34,4 +34,3 @@ test_that(
     expect_true(inherits(p, "gg"))
   }
 )
-
