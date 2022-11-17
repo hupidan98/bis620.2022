@@ -32,6 +32,9 @@ You can install the development version of bis620.2022 from [GitHub](https://git
 ## Example
 
 ```{r example}
+library('usethis')
+library('devtools')
+document()
 library('bis620.2022')
 ## basic example code
 data(ukb_accel)
