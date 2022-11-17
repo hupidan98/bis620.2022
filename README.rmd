@@ -15,18 +15,17 @@ knitr::opts_chunk$set(
 
 # bis620.2022
 
-<!-- badges: start -->
+
 [![R-CMD-check](https://github.com/hupidan98/bis620.2022/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/hupidan98/bis620.2022/actions/workflows/R-CMD-check.yaml)
 [![lint](https://github.com/hupidan98/bis620.2022/actions/workflows/lint.yaml/badge.svg)](https://github.com/hupidan98/bis620.2022/actions/workflows/lint.yaml)
 [![test-coverage](https://github.com/hupidan98/bis620.2022/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/hupidan98/bis620.2022/actions/workflows/test-coverage.yaml)
-<!-- [![Codecov test coverage](https://codecov.io/gh/hupidan98/bis620.2022/branch/main/graph/badge.svg)](https://app.codecov.io/gh/hupidan98/bis620.2022?branch=main) -->
-<!-- badges: end -->
+
 
 This is the course project for BIS620. bis620.2022 project generte accelerometry plot from 3-D accelerate data sets. Moreover, spectral plots are generated. `ukb_accel` dataset (from UKBiobank) is included in package.
 
 ## Installation
 
-You can install the development version of bis620.2022 from [GitHub](https://github.com/) with: <br>
+You can install the development version of bis620.2022 from [GitHub](https://github.com/hupidan98/bis620.2022) with: <br>
 `install.packages("devtools")` <br>
 `devtools::install_github("hupidan98/bis620.2022")`
 
