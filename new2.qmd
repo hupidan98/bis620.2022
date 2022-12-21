@@ -1,0 +1,245 @@
+```{r}
+library(readr)
+library(DT)
+library(dplyr)
+library(sf)
+library(purrr)
+library("ggplot2")
+library(usmap)
+```
+
+```{r}
+svi_dict <- read_csv(file.path('MinorityHealthSVI_DataDictionary_2018.csv'))
+
+svi_dict %>%
+  select(`Variable or Abbreviation`, Description) %>% 
+  datatable()
+
+# Read our svi
+svi <- read_csv(file.path("mh_svi_county_2018.csv"))
+
+svi_tb <- svi |> 
+  filter(!is.na(E_PCI)) |>
+  as_tibble()
+
+```
+
+
+```{r}
+svi_tb$all_diseases = svi_tb$ER_CARDIO + svi_tb$ER_DIAB + svi_tb$ER_OBES + svi_tb$ER_RESPD
+```
+
+
+
+
+```{r}
+# Distributions
+
+# Money
+hist(svi_tb$E_PCI, breaks = 60)
+
+# Health Condition
+hist(svi_tb$ER_CARDIO, breaks = 60)
+hist(svi_tb$ER_DIAB, breaks = 60)
+hist(svi_tb$ER_OBES, breaks = 60)
+hist(svi_tb$ER_RESPD, breaks = 60)
+hist(svi_tb$all_diseases, breaks = 60)
+
+# Language
+hist(svi_tb$E_SPAN, breaks = 60)
+hist(svi_tb$E_CHIN, breaks = 60)
+hist(svi_tb$E_VIET, breaks = 60)
+hist(svi_tb$E_KOR, breaks = 60)
+hist(svi_tb$E_RUS, breaks = 60)
+# Ethnicity
+hist(svi_tb$E_AIAN, breaks = 60)
+hist(svi_tb$E_AFAM, breaks = 60)
+hist(svi_tb$E_NHPI, breaks = 60)
+hist(svi_tb$E_HISP, breaks = 60)
+hist(svi_tb$E_OTHER, breaks = 60)
+
+# SocialEconomic
+hist(svi_tb$E_NOHSDP, breaks = 60)
+hist(svi_tb$E_UNEMP, breaks = 60)
+hist(svi_tb$E_NOINT, breaks = 60)
+hist(svi_tb$E_NOVEH, breaks = 60)
+hist(svi_tb$E_SNGPNT, breaks = 60)
+hist(svi_tb$E_MUNIT, breaks = 60)
+
+# Hospital Facility
+hist(svi_tb$PCP, breaks = 60)
+hist(svi_tb$HOSP, breaks = 60)
+hist(svi_tb$PHARM, breaks = 60)
+hist(svi_tb$URG, breaks = 60)
+
+
+# As Language, Ehtinicy, SocialEconomic, and Hostpial Facility are long tail, We use log transformation
+
+# E_CPI vs Log Language 
+hist(log(svi_tb$E_SPAN), breaks = 60)
+hist(log(svi_tb$E_CHIN), breaks = 60)
+hist(log(svi_tb$E_VIET), breaks = 60)
+hist(log(svi_tb$E_KOR), breaks = 60)
+hist(log(svi_tb$E_RUS), breaks = 60)
+# E_CPI vs Log Ethnicity
+hist(log(svi_tb$E_AIAN), breaks = 60)
+hist(log(svi_tb$E_AFAM), breaks = 60)
+hist(log(svi_tb$E_NHPI), breaks = 60)
+hist(log(svi_tb$E_HISP), breaks = 60)
+hist(log(svi_tb$E_OTHER), breaks = 60)
+
+# E_CPI vs Log SocialEconomic
+hist(log(svi_tb$E_NOHSDP), breaks = 60)
+hist(log(svi_tb$E_UNEMP), breaks = 60)
+hist(log(svi_tb$E_NOINT), breaks = 60)
+hist(log(svi_tb$E_NOVEH), breaks = 60)
+hist(log(svi_tb$E_SNGPNT), breaks = 60)
+hist(log(svi_tb$E_MUNIT), breaks = 60)
+
+# E_CPI vs Log Hospital Facility
+hist(log(svi_tb$PCP), breaks = 60)
+hist(log(svi_tb$HOSP), breaks = 60)
+hist(log(svi_tb$PHARM), breaks = 60)
+hist(log(svi_tb$URG), breaks = 60)
+
+
+```
+```{r}
+# Scatter Plot
+
+
+# E_PCI vs Log Language
+plot(svi_tb$E_PCI, log(svi_tb$E_SPAN))
+plot(svi_tb$E_PCI, log(svi_tb$E_CHIN))
+plot(svi_tb$E_PCI, log(svi_tb$E_VIET))
+plot(svi_tb$E_PCI, log(svi_tb$E_KOR))
+plot(svi_tb$E_PCI, log(svi_tb$E_RUS))
+# E_PCI vs Log Ethnicity
+plot(svi_tb$E_PCI, log(svi_tb$E_AIAN))
+plot(svi_tb$E_PCI, log(svi_tb$E_AFAM))
+plot(svi_tb$E_PCI, log(svi_tb$E_NHPI))
+plot(svi_tb$E_PCI, log(svi_tb$E_HISP))
+plot(svi_tb$E_PCI, log(svi_tb$E_OTHER))
+
+# E_PCI vs Log SocialEconomic
+plot(svi_tb$E_PCI, log(svi_tb$E_NOHSDP))
+plot(svi_tb$E_PCI, log(svi_tb$E_UNEMP))
+plot(svi_tb$E_PCI, log(svi_tb$E_NOINT))
+plot(svi_tb$E_PCI, log(svi_tb$E_NOVEH))
+plot(svi_tb$E_PCI, log(svi_tb$E_SNGPNT))
+plot(svi_tb$E_PCI, log(svi_tb$E_MUNIT))
+
+# E_PCI vs Log Hospital Facility
+plot(svi_tb$E_PCI, log(svi_tb$PCP))
+plot(svi_tb$E_PCI, log(svi_tb$HOSP))
+plot(svi_tb$E_PCI, log(svi_tb$PHARM))
+plot(svi_tb$E_PCI, log(svi_tb$URG))
+
+# Health Conditons VS E_PCI
+plot(svi_tb$ER_CARDIO ,svi_tb$E_PCI)
+plot(svi_tb$ER_DIAB ,svi_tb$E_PCI)
+plot(svi_tb$ER_OBES ,svi_tb$E_PCI)
+plot(svi_tb$ER_RESPD ,svi_tb$E_PCI)
+plot(svi_tb$all_diseases, svi_tb$E_PCI)
+
+```
+
+```{r}
+# log Transform all data
+log_transform <- function(column_data) {
+  # column_data = select(data, c(col_name))
+  log_col = as.vector(unlist(log(column_data)))
+  log_col[is.na(log_col) | is.infinite(log_col)] = 0
+  log_col
+}
+
+
+
+```
+
+
+
+```{r}
+svi_tb$fips = svi_tb$FIPS
+
+df <- select(svi_tb, fips, E_PCI)
+plot_usmap(data = df, values = 'E_PCI')
+
+
+df <- select(svi_tb, fips, PCP)
+plot_usmap(data = df, values = 'PCP')
+
+df <- select(svi_tb, fips, HOSP)
+plot_usmap(data = df, values = 'HOSP')
+
+df <- select(svi_tb, fips, PHARM)
+plot_usmap(data = df, values = 'PHARM')
+
+df <- select(svi_tb, fips, URG)
+plot_usmap(data = df, values = 'URG')
+
+df <- select(svi_tb, fips, ER_CARDIO)
+plot_usmap(data = df, values = 'ER_CARDIO')
+
+df <- select(svi_tb, fips, ER_DIAB)
+plot_usmap(data = df, values = 'ER_DIAB')
+
+df <- select(svi_tb, fips, ER_OBES)
+plot_usmap(data = df, values = 'ER_OBES')
+
+df <- select(svi_tb, fips, ER_RESPD)
+plot_usmap(data = df, values = 'ER_RESPD')
+
+df <- select(svi_tb, fips, all_diseases)
+plot_usmap(data = df, values = 'all_diseases')
+```
+
+
+```{r}
+# regression's
+
+PCIvsLanguage = lm(svi_tb$E_PCI ~ log_transform(svi_tb$E_SPAN) + log_transform(svi_tb$E_CHIN) + log_transform(svi_tb$E_VIET) + log_transform(svi_tb$E_KOR) + log_transform(svi_tb$E_RUS))
+summary(PCIvsLanguage)
+
+
+PCIvsEthnicity = lm(svi_tb$E_PCI ~ log_transform(svi_tb$E_AIAN) + log_transform(svi_tb$E_AFAM) + log_transform(svi_tb$E_NHPI) + log_transform(svi_tb$E_HISP) + log_transform(svi_tb$E_OTHER))
+summary(PCIvsEthnicity)
+
+PCIvsSocialEconomoic = lm(svi_tb$E_PCI ~ log_transform(svi_tb$E_NOHSDP) + log_transform(svi_tb$E_UNEMP) + log_transform(svi_tb$E_NOVEH) + log_transform(svi_tb$E_SNGPNT) + log_transform(svi_tb$E_MUNIT))
+summary(PCIvsSocialEconomoic)
+
+# PCI to Deases
+CARDOvsPCI = lm(svi_tb$ER_CARDIO ~ svi_tb$E_PCI)
+summary(CARDOvsPCI)
+
+DIABvsPCI = lm(svi_tb$ER_DIAB ~ svi_tb$E_PCI)
+summary(DIABvsPCI)
+
+OBESvsPCI = lm(svi_tb$ER_OBES ~ svi_tb$E_PCI)
+summary(OBESvsPCI)
+
+RESPDvsPCI = lm(svi_tb$ER_RESPD ~ svi_tb$E_PCI)
+summary(RESPDvsPCI)
+
+AllDieseasnvsPCI = lm(svi_tb$all_diseases ~ svi_tb$E_PCI)
+summary(AllDieseasnvsPCI)
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+是
+
+
