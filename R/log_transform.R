@@ -11,7 +11,7 @@
 #'
 #'
 log_transform <- function(column_data) {
-  log_col = as.vector(unlist(log(column_data)))
-  log_col[is.na(log_col) | is.infinite(log_col)] = 0
+  log_col <-  as.vector(unlist(log(column_data)))
+  log_col[is.na(log_col) | is.infinite(log_col)] <-  0
   log_col
 }
