@@ -126,7 +126,7 @@ hist(svi_tb$HOSP, breaks = 60)
 hist(svi_tb$PHARM, breaks = 60)
 hist(svi_tb$URG, breaks = 60)
 
-# As Language, Ehtinicy, SocialEconomic, and 
+# As Language, Ehtinicy, SocialEconomic, and
 # Hostpial Facility are long tail, We use log transformation
 # E_CPI vs Log Language
 hist(log(svi_tb$E_SPAN), breaks = 60)
@@ -250,15 +250,23 @@ plot_usmap(data = df, values = "ER_RESPD")
 ```{r include = FALSE}
 # regression's
 
-pcivslanguage <- lm(svi_tb$E_PCI ~ log_transform(svi_tb$E_SPAN) + log_transform(svi_tb$E_CHIN) + log_transform(svi_tb$E_VIET) + log_transform(svi_tb$E_KOR) + log_transform(svi_tb$E_RUS))
+pcivslanguage <- lm(svi_tb$E_PCI ~ log_transform(svi_tb$E_SPAN) +
+                      log_transform(svi_tb$E_CHIN) +
+                      log_transform(svi_tb$E_VIET) +
+                      log_transform(svi_tb$E_KOR) +
+                      log_transform(svi_tb$E_RUS))
 
 
 
-pcivsethnicity <- lm(svi_tb$E_PCI ~ log_transform(svi_tb$E_AIAN) + log_transform(svi_tb$E_AFAM) + log_transform(svi_tb$E_NHPI) + log_transform(svi_tb$E_HISP) + log_transform(svi_tb$E_OTHER))
+pcivsethnicity <- lm(svi_tb$E_PCI ~ log_transform(svi_tb$E_AIAN) +
+                       log_transform(svi_tb$E_AFAM) +
+                       log_transform(svi_tb$E_NHPI) +
+                       log_transform(svi_tb$E_HISP) +
+                       log_transform(svi_tb$E_OTHER))
 
 
-pcivssocialeconomic <- lm(svi_tb$E_PCI ~ log_transform(svi_tb$E_NOHSDP) + log_transform(svi_tb$E_UNEMP) + log_transform(svi_tb$E_NOVEH) + 
-                               log_transform(svi_tb$E_SNGPNT) + 
+pcivssocialeconomic <- lm(svi_tb$E_PCI ~ log_transform(svi_tb$E_NOHSDP) + log_transform(svi_tb$E_UNEMP) + log_transform(svi_tb$E_NOVEH) +
+                               log_transform(svi_tb$E_SNGPNT) +
                                log_transform(svi_tb$E_MUNIT))
 
 
