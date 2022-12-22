@@ -1,17 +1,25 @@
 ---
-title: "DS$^3$ 2022-12-01"
-format: html
+title: "bis620"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{bis620}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
-# Vignettes
-
-```{r eval = FALSE}
-library(usethis)
-use_vignette("bis620")
-browseVignettes()
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
 ```
 
-```{r}
+```{r setup}
+library(usethis)
+library(devtools)
+document()
+library(bis620.2022)
+
 library(readr)
 library(DT)
 library(dplyr)
@@ -21,22 +29,11 @@ library("ggplot2")
 library(usmap)
 ```
 
-```{r}
-svi_dict <- read_csv('MinorityHealthSVI_DataDictionary_2018.csv')
-
-svi_dict %>%
-  select(`Variable or Abbreviation`, Description) %>% 
-  datatable()
-
-# Read our svi
-svi <- read_csv("mh_svi_county_2018.csv")
-
-svi_tb <- svi |> 
-  filter(!is.na(E_PCI)) |>
-  as_tibble()
-
-```
-
+# ```{r}
+# svi_tb <- bis620.2022::svi_tb
+# svi_dict <- bi
+# 
+# ```
 
 ```{r}
 svi_tb$all_diseases = svi_tb$ER_CARDIO + svi_tb$ER_DIAB + svi_tb$ER_OBES + svi_tb$ER_RESPD
@@ -238,9 +235,3 @@ AllDieseasnvsPCI = lm(svi_tb$all_diseases ~ svi_tb$E_PCI)
 summary(AllDieseasnvsPCI)
 
 ```
-
-
-
-
-
-
