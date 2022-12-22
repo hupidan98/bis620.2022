@@ -43,20 +43,20 @@ The first step of this investigation is to configure a proper dataset to work wi
 ## Implementation
 To continue, eight separate linear regression models will be built. A linear regression is a great for this investigation, as it is able incorporate many different predictor variables in the equation, and provide exactly how much influence each predictor variable has on the independent variable (one’s overall health status). The eight models are of the following:
 
-1. PCI_vs_Language
+1. pcivslanguage
     * where PCI is the independent variable, and the number of Spanish, Chinese, Vietnamese, Korean and Russian who speak english less that “very well” are the predictor variables
 
-2. PCI_vs_Ethnicity:
+2. pcivsethnicity:
     * where PCI is the independent variable, and the number of American Indian/Alaska Native, Asian, African American, Native Hawaiian/Pacific Islander, Hispanic or Latinx and Some Other Race, are the predictor variables
 3. PCIvsSocialEconomic:
     * where PCI is the independent variable, and the number of people above age 25 are with no high school diploma, civilian age 16+ unemployed, people with no internet access, households with no vehicle, single parent with household with children under 18, and people living in housing structures with 10 or more units are the predictor variables
-4. CARDO_vs_PCI:
+4. cardovspci:
     * where the number of people with CVD is the independent variable and the per capita income is the dependent variable. 
-5. DIAB_vs_PCI:
+5. diabvspci:
     * where the number of people with diabetes is the independent variable and the per capita income is the dependent variable. 
-6. OBES_vs_PCI:
+6. obesvspci:
     * where the number of people with obesity is the independent variable and the per capita income is the dependent variable. 
-7. RESPD_vs_PCI:
+7. respdvspci:
     * where the number of people with chronic respiratory diseases is the independent variable and the per capita income is the dependent variable. 
 8. ALLDISEASESvsPCI
     * where the sum of the number of CVD, diabetes, obesity, chronic respiratory disease is the independent variable and the per capita income is the dependent variable. 
@@ -82,7 +82,7 @@ library(usmap)
 ```
 
 ```{r include = FALSE}
-svi_tb$all_diseases <-  svi_tb$ER_CARDIO + svi_tb$ER_DIAB + 
+svi_tb$all_diseases <- svi_tb$ER_CARDIO + svi_tb$ER_DIAB +
   svi_tb$ER_OBES + svi_tb$ER_RESPD
 ```
 
@@ -126,8 +126,9 @@ hist(svi_tb$HOSP, breaks = 60)
 hist(svi_tb$PHARM, breaks = 60)
 hist(svi_tb$URG, breaks = 60)
 
-# As Language, Ehtinicy, SocialEconomic, and Hostpial Facility are long tail, We use log transformation
-# E_CPI vs Log Language 
+# As Language, Ehtinicy, SocialEconomic, and 
+# Hostpial Facility are long tail, We use log transformation
+# E_CPI vs Log Language
 hist(log(svi_tb$E_SPAN), breaks = 60)
 hist(log(svi_tb$E_CHIN), breaks = 60)
 hist(log(svi_tb$E_VIET), breaks = 60)
@@ -200,7 +201,6 @@ plot(svi_tb$all_diseases, svi_tb$E_PCI)
 ```{r include = FALSE}
 # log Transform all data
 log_transform <- function(column_data) {
-  # column_data = select(data, c(col_name))
   log_col <- as.vector(unlist(log(column_data)))
   log_col[is.na(log_col) | is.infinite(log_col)] <- 0
   log_col
@@ -250,30 +250,32 @@ plot_usmap(data = df, values = "ER_RESPD")
 ```{r include = FALSE}
 # regression's
 
-PCI_vs_Language <- lm(svi_tb$E_PCI ~ log_transform(svi_tb$E_SPAN) + log_transform(svi_tb$E_CHIN) + log_transform(svi_tb$E_VIET) + log_transform(svi_tb$E_KOR) + log_transform(svi_tb$E_RUS))
+pcivslanguage <- lm(svi_tb$E_PCI ~ log_transform(svi_tb$E_SPAN) + log_transform(svi_tb$E_CHIN) + log_transform(svi_tb$E_VIET) + log_transform(svi_tb$E_KOR) + log_transform(svi_tb$E_RUS))
 
 
 
-PCI_vs_Ethnicity <- lm(svi_tb$E_PCI ~ log_transform(svi_tb$E_AIAN) + log_transform(svi_tb$E_AFAM) + log_transform(svi_tb$E_NHPI) + log_transform(svi_tb$E_HISP) + log_transform(svi_tb$E_OTHER))
+pcivsethnicity <- lm(svi_tb$E_PCI ~ log_transform(svi_tb$E_AIAN) + log_transform(svi_tb$E_AFAM) + log_transform(svi_tb$E_NHPI) + log_transform(svi_tb$E_HISP) + log_transform(svi_tb$E_OTHER))
 
 
-PCI_vs_Socialeconomoic <- lm(svi_tb$E_PCI ~ log_transform(svi_tb$E_NOHSDP) + log_transform(svi_tb$E_UNEMP) + log_transform(svi_tb$E_NOVEH) + log_transform(svi_tb$E_SNGPNT) + log_transform(svi_tb$E_MUNIT))
+pcivssocialeconomic <- lm(svi_tb$E_PCI ~ log_transform(svi_tb$E_NOHSDP) + log_transform(svi_tb$E_UNEMP) + log_transform(svi_tb$E_NOVEH) + 
+                               log_transform(svi_tb$E_SNGPNT) + 
+                               log_transform(svi_tb$E_MUNIT))
 
 
 # PCI to Deases
-CARDO_vs_PCI <- lm(svi_tb$ER_CARDIO ~ svi_tb$E_PCI)
+cardovspci <- lm(svi_tb$ER_CARDIO ~ svi_tb$E_PCI)
 
 
-DIAB_vs_PCI <- lm(svi_tb$ER_DIAB ~ svi_tb$E_PCI)
+diabvspci <- lm(svi_tb$ER_DIAB ~ svi_tb$E_PCI)
 
 
-OBES_vs_PCI <- lm(svi_tb$ER_OBES ~ svi_tb$E_PCI)
+obesvspci <- lm(svi_tb$ER_OBES ~ svi_tb$E_PCI)
 
 
-RESPD_vs_PCI <- lm(svi_tb$ER_RESPD ~ svi_tb$E_PCI)
+respdvspci <- lm(svi_tb$ER_RESPD ~ svi_tb$E_PCI)
 
 
-Alldieseasn_vs_PCI <- lm(svi_tb$all_diseases ~ svi_tb$E_PCI)
+alldiseasevspci <- lm(svi_tb$all_diseases ~ svi_tb$E_PCI)
 
 
 ```
@@ -293,20 +295,20 @@ $$\hat{E\_PCI} = \hat{26862.10} - \hat{511.50}(E\_SPAN) + \hat{414.30}(E\_CHIN) 
 
  
 ```{r echo = FALSE}
-summary(PCI_vs_Language)
+summary(pcivslanguage)
 ```
 
 It appears that only the presence of Spanish speakers who cannot speak English fluently has a negative correlation with income per capita (coefficient =-511.50). Other language speakers who cannot speak English fluently have a small but positive effect on income per capita. This means that despite not speaking English really well, all minorities included, except Spanish, seem to have a positive correlation with income per capita; this means that an increase in those numbers in minorities, despite their poor English skills, still increases their income levels. However, looking at the model, it can be seen that the increases are quite small.
 
 #### Ethinicity:
 ```{r echo = FALSE}
-summary(PCI_vs_Ethnicity)
+summary(pcivsethnicity)
 ```
 Looking at the summary, it can be seen that the number of people that identify as African American or Black is negatively associated with income per capita (coefficient = -478.67). In other words, communities with larger African American or Black populations may have a smaller income per capita compared to communities with smaller or negligent African American or Black populations. Interestingly, the number of people that identify as Hispanic or Latin(o) has an almost equal but positive correlation with income per capita. 
 
 #### Other Factors:
 ```{r echo = FALSE}
-summary(PCI_vs_Socialeconomoic)
+summary(pcivssocialeconomic)
 ```
 
 Evidently, persons aged 25+ with no high school diploma (coefficicent = -3582.80) and households with no vehicle available (coefficient =-983.65)  are negatively correlated with income per capita. The positive correlation between larger housing structures and income per capita suggests that larger housing structures may signify the location of the community (i.e. city) rather than the housing affordability of the area. 
@@ -321,15 +323,15 @@ To gauge the effect of income on health outcomes, we looked at the influence of 
 Not surprisingly, our findings support those found in literature. For every decrease in  income per capita, the health metric increases by 0.8 units. The individual models for each disease also reflect a negative association between income and disease count or death rate. 
 
 ```{r include = FALSE}
-summary(CARDO_vs_PCI)
-summary(DIAB_vs_PCI)
-summary(OBES_vs_PCI)
-summary(RESPD_vs_PCI)
+summary(cardovspci)
+summary(diabvspci)
+summary(obesvspci)
+summary(respdvspci)
 ```
 
 
 ```{r echo = FALSE}
-summary(Alldieseasn_vs_PCI)
+summary(alldiseasevspci)
 ```
 
 ### Geographic Maps
