@@ -7,6 +7,5 @@ test_that("log transformation works on na", {
 })
 
 test_that("log transformation works on array", {
-  expect_equal(log_transform(c(3, 1/0)), c(log(3), 0))
+  expect_equal(log_transform(c(3, 1 / 0)), c(log(3), 0))
 })
-

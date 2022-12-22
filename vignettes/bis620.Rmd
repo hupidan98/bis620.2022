@@ -15,9 +15,7 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-library(usethis)
-library(devtools)
-document()
+
 library(bis620.2022)
 
 library(readr)
@@ -29,11 +27,6 @@ library("ggplot2")
 library(usmap)
 ```
 
-# ```{r}
-# svi_tb <- bis620.2022::svi_tb
-# svi_dict <- bi
-# 
-# ```
 
 ```{r}
 svi_tb$all_diseases = svi_tb$ER_CARDIO + svi_tb$ER_DIAB + svi_tb$ER_OBES + svi_tb$ER_RESPD
@@ -151,19 +144,6 @@ plot(svi_tb$ER_DIAB ,svi_tb$E_PCI)
 plot(svi_tb$ER_OBES ,svi_tb$E_PCI)
 plot(svi_tb$ER_RESPD ,svi_tb$E_PCI)
 plot(svi_tb$all_diseases, svi_tb$E_PCI)
-
-```
-
-```{r}
-# log Transform all data
-log_transform <- function(column_data) {
-  # column_data = select(data, c(col_name))
-  log_col = as.vector(unlist(log(column_data)))
-  log_col[is.na(log_col) | is.infinite(log_col)] = 0
-  log_col
-}
-
-
 
 ```
 
