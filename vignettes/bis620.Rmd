@@ -265,9 +265,11 @@ pcivsethnicity <- lm(svi_tb$E_PCI ~ log_transform(svi_tb$E_AIAN) +
                        log_transform(svi_tb$E_OTHER))
 
 
-pcivssocialeconomic <- lm(svi_tb$E_PCI ~ log_transform(svi_tb$E_NOHSDP) + log_transform(svi_tb$E_UNEMP) + log_transform(svi_tb$E_NOVEH) +
-                               log_transform(svi_tb$E_SNGPNT) +
-                               log_transform(svi_tb$E_MUNIT))
+pcivssocialeconomic <- lm(svi_tb$E_PCI ~ log_transform(svi_tb$E_NOHSDP) +
+                            log_transform(svi_tb$E_UNEMP) +
+                            log_transform(svi_tb$E_NOVEH) +
+                            log_transform(svi_tb$E_SNGPNT) +
+                            log_transform(svi_tb$E_MUNIT))
 
 
 # PCI to Deases
