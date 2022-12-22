@@ -1,21 +1,16 @@
+
 ---
 title: "Determinants of Income and Its Effects on Overall Health Status"
-output: rmarkdown::html_vignette
 author: "Cindy Gao, Jack Han, Vidhi Patel"
+output: pdf_document
 date: "2022-12-22"
-vignette: >
-  %\VignetteIndexEntry{bis620}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
 ---
 
-
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
 ```
+
+# Vignettes
 
 # INTRODUCTION
 
@@ -68,10 +63,14 @@ $$\hat{E\_PCI} = \hat\beta_0 + \hat\beta_1(E\_NOHSDP) + \hat\beta_2(E\_UNEMP) + 
 Furthermore, to visualize these variables and models, coloured geographic maps were drawn for the income per capita across and each and all diseases for comparison. This visualization will make it possible to assess whether there exists any similarities between the distribution of wealth and health care status across the country. 
 
 
-```{r setup}
 
-library(bis620.2022)
+```{r eval = FALSE}
+library(usethis)
+use_vignette("bis620")
+browseVignettes()
+```
 
+```{r include = FALSE}
 library(readr)
 library(DT)
 library(dplyr)
@@ -82,8 +81,28 @@ library(usmap)
 ```
 
 ```{r include = FALSE}
+svi_dict <- read_csv('MinorityHealthSVI_DataDictionary_2018.csv')
+
+svi_dict %>%
+  select(`Variable or Abbreviation`, Description) %>% 
+  datatable()
+
+# Read our svi
+svi <- read_csv("mh_svi_county_2018.csv")
+
+svi_tb <- svi |> 
+  filter(!is.na(E_PCI)) |>
+  as_tibble()
+
+```
+
+
+```{r include = FALSE}
 svi_tb$all_diseases = svi_tb$ER_CARDIO + svi_tb$ER_DIAB + svi_tb$ER_OBES + svi_tb$ER_RESPD
 ```
+
+
+
 
 ```{r include = FALSE}
 # Distributions
@@ -360,3 +379,12 @@ Furthermore, there was no clear identification of the overall health levels acro
 # CONCLUSION
 
 All in all, social inequalities like income (as measured by income per capita) is influenced by a multitude of factors. While one may be compelled to group overarching themes such as minorities or education as determinants of these inequalities, our investigation reveals that identifying those on the lower end of a given measure may require more specificity.  The effects of minority status on the uneven wealth and quality healthcare distribution across the United States of America have been a long-discussed topic. As it can be seen, this is a large complex and intricate topic that involves many different factors. To successfully produce this research investigation, many of these aspects had to be simplified. Due to this, there may be some factors that may have been overlooked in the results. 
+
+
+
+
+
+
+
+
+
